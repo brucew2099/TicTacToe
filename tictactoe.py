@@ -33,8 +33,8 @@ def player(board):
 
     if sum_x == sum_o:
         return 'X'
-
-    return 'O'
+    else:
+        return 'O'
     
 
 
@@ -58,15 +58,17 @@ def result(board, action):
     Returns the board that results from making move (i, j) on the board.
     """
    
-    i, j = action
+    new_board = copy.deepcopy(board)
 
-    if i < 3 and j < 3 and board[i][j] is EMPTY:
-        who = player(board)
-        new_board = copy.deepcopy(board)
-        new_board[i][j] = who
+    # action is a tuple
+    i = action[0]
+    j = action[1]
+
+    if board[i][j] is EMPTY:
+        new_board[i][j] = player(board)
         return new_board
-
-    raise Exception('Not a valid move') 
+    else:
+        raise Exception('Not a valid move') 
 
 
 def winner(board):
@@ -77,18 +79,15 @@ def winner(board):
     for i in range(3):
         if board[i][0] == board[i][1] == board[i][2] == 'X' or board[0][i] == board[1][i] == board[2][i] == 'X':
             return 'X'
-        elif board[i][0] == board[i][1] == board[i][2] == 'X' or board[0][i] == board[1][i] == board[2][i] == 'O':
+        elif board[i][0] == board[i][1] == board[i][2] == 'O' or board[0][i] == board[1][i] == board[2][i] == 'O':
             return 'O'
      
-    if board[1][1] is not EMPTY:
-        if board[1][1] == 'X':
-            if board[0][0] == board[2][2] or board[0][2] == board[2][0] == 'X':
-                return 'X'
-        else:
-            if board[0][0] == board[2][2] or board[0][2] == board[2][0] == 'O':
-                return 'O'
+        if board[0][0] == board[1][1] == board[2][2] == 'X' or board[0][2] == board[1][1] == board[2][0] == 'X':
+            return 'X'
+        elif board[0][0] == board[1][1] == board[2][2] == 'O' or board[0][2] == board[1][1] == board[2][0] == 'O':
+            return 'O'
 
-    return EMPTY
+    return None
 
 
 def terminal(board):
